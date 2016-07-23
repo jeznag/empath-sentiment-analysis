@@ -7,6 +7,7 @@ Features include:
 - egoismAnalyser (so you can figure out how selfish someone is based on their communication)
 
 Usage:
+
 **Install module**
 
 `npm install --save-dev empath-sentiment-analysis`
