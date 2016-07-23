@@ -1,5 +1,5 @@
 
-export var analyseEgoism = function(text) {
+export default function analyseEgoism(text) {
   if (text.length) {
     return analyseText(text);
   }
@@ -9,7 +9,7 @@ export var analyseEgoism = function(text) {
     controlling: 0, 
     conforming: 0
   };
-};
+}
 
 const NON_WORD_CHARACTERS = /[";:,.?¿\-\—!¡]+/g,
       SELFISH_WORDS = /( i | my | mine | i'm | i'll )/g,
@@ -28,6 +28,4 @@ function analyseText(text) {
     controlling: controllingWords ? controllingWords.length : 0, 
     conforming: conformingWords ? conformingWords.length : 0
   };
-
 }
-

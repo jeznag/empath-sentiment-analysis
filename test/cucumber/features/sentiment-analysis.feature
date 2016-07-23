@@ -12,7 +12,7 @@ Given that Jeremy has written the following emails in Gmail:
     |This is really fucking awesome|
     |Great job:)|
     |I'm not bad|
-    |I'm disappointed:(|
+    |I'm disappointed :(|
     |This sucks!!!!|
     |THIS SUCKS!!!!|
     |I can't wait any longer|
@@ -24,7 +24,7 @@ Then SleepOnIt should give the following sentiment scores:
     |-9|
     |8|
     |24|
-    |7|
+    |6|
     |3|
     |-6|
     |-51|

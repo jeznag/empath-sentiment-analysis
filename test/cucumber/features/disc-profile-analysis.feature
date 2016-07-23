@@ -36,7 +36,7 @@ Then SleepOnIt should give the following DISC results:
 
 Scenario:
 Given that Pat (high S) has written the following emails:
-    |Hey everyone, wanted to give you a quick pep talk:) Let's consider our actions carefully because we don't know what might happen. I really want to make sure everyone agrees with this. We don't want to ruffle anyone's feathers:) Let's take some time to reflect on what we should do next. Teamwork makes the dream work!|
+    |Hey everyone, wanted to give you a quick pep talk :) Let's consider our actions carefully because we don't know what might happen. I really want to make sure everyone agrees with this. We don't want to ruffle anyone's feathers :) Let's take some time to reflect on what we should do next. Teamwork makes the dream work!|
     |Let's hold off making a decision on this until we can gather more information. I want to make sure that the team is happy with the new office move. Let's all take some time to think about what we all think and come back together in a few weeks. We want to make sure everyone gets consulted.|
 When Pat tries to send the emails
 Then SleepOnIt should give the following DISC results:

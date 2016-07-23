@@ -18,7 +18,7 @@ module.exports = function () {
   this.When('the sender sends the emails with varying egoism levels', function (done) {
 
     emailData.forEach(function (individualEmail) {
-      let egoismScore = thisWorld.egoismAnalyser.analyseEgoism(individualEmail[0]);
+      let egoismScore = thisWorld.egoismAnalyser(individualEmail[0]);
 
       egoismScores.push(egoismScore);
     });

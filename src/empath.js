@@ -1,13 +1,13 @@
-import sentimentAnalyser from './analyseSentiment.js';
-import discProfileAnalyser from './analyseDISCProfile.js';
-import emailParser from './utils/emailParseUtil.js';
-import readabilityAnalyser from './utils/calculateReadingLevel.js';
-import egoismAnalyser from './utils/egoismAnalyser.js';
+import analyseSentiment from './analyseSentiment.js';
+import guessDISCProfile from './analyseDISCProfile.js';
+import emailParseUtil from './utils/emailParseUtil.js';
+import { calculateReadabilityScore } from './utils/calculateReadingLevel.js';
+import analyseEgoism from './utils/egoismAnalyser.js';
 
 export default {
-    sentimentAnalyser,
-    discProfileAnalyser,
-    emailParser,
-    readabilityAnalyser,
-    egoismAnalyser 
+    analyseSentiment,
+    guessDISCProfile,
+    parseEmail: emailParseUtil.removeQuotedTextFromEmail,
+    calculateReadabilityScore,
+    analyseEgoism
 };

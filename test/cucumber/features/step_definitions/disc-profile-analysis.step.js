@@ -1,4 +1,3 @@
-import discProfileAnalyser from '../../../../src/analyseDISCProfile.js';
 import assert from 'cucumber-assert';
 import { World } from '../support/world.js';
 
@@ -17,8 +16,7 @@ module.exports = function () {
     actualDISCProfileResults = [];
 
     emailData.forEach(function (individualEmail) {
-      let readabilityScore = thisWorld.readabilityAnalyser.calculateReadabilityScore(individualEmail[0]),
-          discProfile = thisWorld.discProfileAnalyser.analyseEmail(individualEmail[0], readabilityScore);
+      const discProfile = thisWorld.discProfileAnalyser.analyseEmail(individualEmail[0]);
 
       actualDISCProfileResults.push(discProfile)
     });

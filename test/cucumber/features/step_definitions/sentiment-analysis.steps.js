@@ -18,7 +18,7 @@ module.exports = function () {
   this.When('Jeremy tries to send the emails in Gmail', function (done) {
 
     emailData.forEach(function (individualEmail) {
-      let sentimentScore = thisWorld.sentimentAnalyser.analyseSentiment(individualEmail[0]);
+      let sentimentScore = thisWorld.sentimentAnalyser(individualEmail[0]);
 
       sentimentScores.push(sentimentScore)
     });
@@ -34,7 +34,7 @@ module.exports = function () {
           expectedScore = parseInt(expectedScoreString[0]);
 
       if (actualScore !== expectedScore) {
-        console.log('Expected ' + expectedScore + ' to equal ' + actualScore);
+        console.log('Expected ' + actualScore + ' to equal ' + expectedScore);
         allTestsPass = false;
       }
 

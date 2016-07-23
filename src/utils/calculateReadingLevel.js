@@ -9,9 +9,9 @@ export function calculateReadabilityScore (text) {
 }
 
 export function getQualitativeVocabularyLevel(text) {
-  var readingLevel = calculateReadabilityScore(text);
-  const ADVANCED_THRESHOLD = 8,
-        SUPER_ADVANCED_THRESHOLD = 12;
+  const readingLevel = calculateReadabilityScore(text);
+  const ADVANCED_THRESHOLD = 8;
+  const SUPER_ADVANCED_THRESHOLD = 12;
 
   if (readingLevel < ADVANCED_THRESHOLD) {
     return 'basic';
@@ -25,11 +25,10 @@ export function getQualitativeVocabularyLevel(text) {
 const NON_WORD_CHARACTERS = /['";:,.?¿\-\—!¡]+/g;
 
 function analyseText(text) {
-  var strippedText = text.replace(NON_WORD_CHARACTERS, ''),
-      words = strippedText.match(/\S+/g),
-      numWords = 0,
-      numCharacters,
-      readabilityScore;
+  const strippedText = text.replace(NON_WORD_CHARACTERS, '');
+  const words = strippedText.match(/\S+/g);
+  let numWords = 0;
+  let numCharacters, readabilityScore;
 
   if (words) {
     numWords = words.length;
@@ -41,6 +40,6 @@ function analyseText(text) {
   return readabilityScore;
 }
 
-var getAutomatedReadabilityIndex = function(numWords, numCharacters) {
+function getAutomatedReadabilityIndex(numWords, numCharacters) {
   return (numCharacters / numWords).toFixed(1);
-};
+}

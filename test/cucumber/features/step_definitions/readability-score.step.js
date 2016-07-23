@@ -18,7 +18,7 @@ module.exports = function () {
   this.When('the sender sends the emails', function (done) {
 
     emailData.forEach(function (individualEmail) {
-      let readabilityScore = thisWorld.readabilityAnalyser.calculateReadabilityScore(individualEmail[0]);
+      let readabilityScore = thisWorld.readabilityAnalyser(individualEmail[0]);
 
       readabilityScores.push(readabilityScore);
     });
