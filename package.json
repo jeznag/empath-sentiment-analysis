@@ -1,6 +1,6 @@
 {
   "name": "empath-sentiment-analysis",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tools to analyse sentiment in the browser",
   "main": "empath.js",
   "scripts": {
