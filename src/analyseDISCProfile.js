@@ -49,9 +49,7 @@ export var discProfileAnalyser = (function () {
             };
 
         addGuessBasedOnSentiment(emailContents, guessAtDISCProfile);
-
         addGuessBasedOnVocabulary(readabilityScore, guessAtDISCProfile);
-
         addGuessBasedOnEgoism(emailContents, guessAtDISCProfile);
 
         reduceGuessesThatExceedThreshold(guessAtDISCProfile);
@@ -60,12 +58,11 @@ export var discProfileAnalyser = (function () {
     }
 
     function addGuessBasedOnSentiment(emailContents, guessAtDISCProfile) {
-        var sentimentScore = sentimentAnalyser.analyseSentiment(emailContents).score,
-            lengthOfEmail = emailContents.length,
-            LENGTH_OF_SHORT_EMAIL = 30;
-
-        const CHEERFUL_SENTIMENT_SCORE = 5,
-            HYPER_CHEERFUL_SENTIMENT_SCORE = 15;
+        const sentimentScore = sentimentAnalyser.analyseSentiment(emailContents).score;
+        const lengthOfEmail = emailContents.length;
+        const LENGTH_OF_SHORT_EMAIL = 30;
+        const CHEERFUL_SENTIMENT_SCORE = 5;
+        const HYPER_CHEERFUL_SENTIMENT_SCORE = 15;
 
         if (sentimentScore < CHEERFUL_SENTIMENT_SCORE) {
             if (lengthOfEmail < LENGTH_OF_SHORT_EMAIL) {
@@ -105,9 +102,7 @@ export var discProfileAnalyser = (function () {
             guessAtDISCProfile.D += 2;
 
         } else if (egoismScores.conforming > egoismScores.controlling) {
-
             guessAtDISCProfile.S += 2;
-
         } 
     }
 

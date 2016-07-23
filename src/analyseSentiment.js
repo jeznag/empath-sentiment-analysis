@@ -57,17 +57,22 @@ export let analyseSentiment = (function () {
 
         tokens.forEach(function(word, index) {
 
+            const isFinalWord = index === tokens.length - 1;
+
             if (tokens.length < 3 && index > THRESHOLD_BEFORE_WE_TRY_ANOTHER_WORDLIST) {
-                console.log('time to try another wordlist');
                 tryAnotherWordList = true;
                 return;
             }
 
-            const wordSentimentAnalysis = analyseSentimentForWord(word);
+            const wordSentimentAnalysis = analyseSentimentForWord(word, isFinalWord);
             const wordSentimentScore = wordSentimentAnalysis.score;
             const processedWord = wordSentimentAnalysis.word;
             const attributeCorrespondingToThisWord = getAttributeCorrespondingToThisWord(word, attributesOfInterest, tokens, index);
-
+            const hasSameWordAfterwards = tokens[index + 1] === word;
+            const endOfSentence = (word === '?' || word === '!' || word === '.') &&
+                //don't consider sentence over if the next word is same e.g !!!
+                !hasSameWordAfterwards;
+                
             if (attributeCorrespondingToThisWord) {
                 if (!attributeScores[attributeCorrespondingToThisWord]) {
                     attributeScores[attributeCorrespondingToThisWord] = 0;
@@ -76,7 +81,9 @@ export let analyseSentiment = (function () {
                 currentAttributeBeingDiscussed = attributeCorrespondingToThisWord;
             }
 
-            if (word === '?' || word === '!' || word === '.') {
+            scoreForCurrentSentence += wordSentimentScore;
+
+            if (endOfSentence) {
                 //end of sentence - give score to current attribute
                 //e.g. Sentence is "I really like Zoho Support" - should get score from `really like`
                 if (currentAttributeBeingDiscussed) {
@@ -96,8 +103,6 @@ export let analyseSentiment = (function () {
             } else if (wordSentimentScore < 0) {
                 negative.push(processedWord);
             }
-
-            scoreForCurrentSentence += wordSentimentScore;
 
             score += wordSentimentScore;
         });
@@ -122,16 +127,16 @@ export let analyseSentiment = (function () {
         });
     }
 
-    function analyseSentimentForWord(word) {
-        var lowerCaseWord = word.toLowerCase(),
-            tokenPrefixModifierScore = prefixModifiers[lowerCaseWord],
-            tokenPostfixModifierScore = postfixModifiers[lowerCaseWord],
-            tokenSentimentScore = sentimentScores[lowerCaseWord],
-            processedSentimentScore = 0,
-            isAllUpperCase = word.toUpperCase() === word,
-            MULTIPLIER_FOR_ALL_UPPER_CASE = 2,
-            shouldAddToScore = tokenPrefixModifierScore || tokenPostfixModifierScore || tokenSentimentScore,
-            processedWord;
+    function analyseSentimentForWord(word, isFinalWord) {
+        const lowerCaseWord = word.toLowerCase();
+        const tokenPrefixModifierScore = prefixModifiers[lowerCaseWord];
+        const tokenPostfixModifierScore = postfixModifiers[lowerCaseWord];
+        const tokenSentimentScore = sentimentScores[lowerCaseWord];
+        const isAllUpperCase = word.toUpperCase() === word;
+        const MULTIPLIER_FOR_ALL_UPPER_CASE = 2;
+        let processedSentimentScore = 0;
+        let shouldAddToScore = tokenPrefixModifierScore || tokenPostfixModifierScore || tokenSentimentScore;
+        let processedWord;
 
         if (tokenPrefixModifierScore) {
             currentPrefixes.push(word);
@@ -151,6 +156,10 @@ export let analyseSentiment = (function () {
             if (isAllUpperCase) {
                 lastNormalTokenSentimentScore *= MULTIPLIER_FOR_ALL_UPPER_CASE;
             }
+        }
+
+        if (isFinalWord) {
+            shouldAddToScore = true;
         }
 
         if (lastNormalTokenSentimentScore && shouldAddToScore) {

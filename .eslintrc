@@ -1,0 +1,23 @@
+{
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "env": {
+    // I write for browser
+    "browser": true,
+    // in CommonJS
+    "node": true
+  },
+  "globals": {
+    chrome: true
+  },
+  "rules": {
+    "strict": 0,
+    // disable requiring trailing commas because it might be nice to revert to
+    // being JSON at some point, and I don't want to make big changes now.
+    "comma-dangle": 0,
+    "no-use-before-define": ["error", { "functions": false, "classes": false }]
+  },
+  {
+    "no-use-before-define": ["error", { "functions": false, "classes": false }]
+  }
+}
