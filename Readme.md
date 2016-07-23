@@ -8,6 +8,7 @@ Features include:
 
 Usage:
 **Install module**
+
 `npm install --save-dev empath-sentiment-analysis`
 
 **Using Sentiment Analyser**
