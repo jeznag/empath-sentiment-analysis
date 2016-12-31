@@ -1,4 +1,4 @@
-import _ from '../node_modules/underscore/underscore.js';
+import _ from 'underscore';
 import sentimentWordLists from './sentimentWordList.js';
 import regexList from './utils/regexList.js';
 
