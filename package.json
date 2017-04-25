@@ -30,10 +30,14 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.8.0",
-    "stryker": "^0.5.5",
+    "mocha": "^3.3.0",
+    "stryker": "^0.6.0",
     "stryker-api": "^0.4.2",
-    "stryker-tape-runner": "git+https://github.com/jeznag/stryker-tape-runner.git",
+    "stryker-html-reporter": "^0.3.0",
+    "stryker-mocha-runner": "^0.3.0",
+    "stryker-tape-runner": "file:///Users/jeremy/Documents/dev/sideprojects/stryker-tape-runner",
     "tape": "^4.6.0",
+    "tape-catch": "^1.0.6",
     "underscore": "^1.8.3",
     "webpack": "^1.13.1"
   }

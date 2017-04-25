@@ -1,12 +1,17 @@
 module.exports = function (config) {
   config.set({
-    files: ['test/tape/**/*.js', { pattern: 'src/**/*.js', included: false, mutated: true }],
-    testFramework: 'tape',
-    maxConcurrentTestRunners: 3,
-    testRunner: 'tape',
+    files: [
+      'test/mocha/**/*.js',
+      { pattern: 'src/analyseSentiment.js', included: false, mutated: true },
+      { pattern: 'src/sentimentWordList.js', included: false, mutated: false },
+      { pattern: 'src/**/*.js', included: false, mutated: true },
+    ],
+    testFramework: 'mocha',
+    maxConcurrentTestRunners: 6,
+    testRunner: 'mocha',
     coverageAnalysis: 'off',
-    reporter: ['progress', 'clear-text'],
-    logLevel: 'info',
-    plugins: ['stryker-tape-runner']
+    reporter: ['progress', 'html'],
+    logLevel: 'trace',
+    // plugins: ['stryker-mocha-runner', 'stryker-html-reporter']
   });
 };

@@ -1,9 +1,9 @@
-import {test} from 'tape';
+import {test} from 'tape-catch';
 import empath from '../../src/empath.js';
 
 const email = `Hey guys,
 just letting you know that I really like Zoho Support!
-But I've gotta be honest: I really don't like Zoho Projects. It has a lot of problems. It needs the ability to have 
+But I've gotta be honest: I really don't like Zoho Projects. It has a lot of problems. It needs the ability to have
 workflow statuses.`;
 
 test('Empath should analyse sentiment successfully', function (expect) {
@@ -14,6 +14,9 @@ test('Empath should analyse sentiment successfully', function (expect) {
         }
     };
     const actualOutput = empath.analyseSentiment(email, ['Zoho Support', 'Zoho Projects']);
+    console.log('ACTUAL output', actualOutput);
+    expect.equal(typeof actualOutput, 'object');
+    expect.ok(actualOutput);
     expect.deepEqual(actualOutput.attributeScores, expectedOutput.attributeScores);
     expect.end();
 });

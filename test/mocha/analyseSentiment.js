@@ -1,7 +1,8 @@
-import { test } from 'tape';
+import assert from 'assert';
 import analyseSentiment from '../../src/analyseSentiment';
 
-test('Sentiment Analyser should correctly identify sentiment for attributes of interest', function (expect) {
+describe('Sentiment Analyser', () => {
+  it('should correctly identify sentiment for attributes of interest', function () {
     const email = `Hey guys,
     just letting you know that I really like Zoho Support!
     But I've gotta be honest: I really don't like Zoho Projects. It has a lot of problems. It needs the ability to have
@@ -12,13 +13,11 @@ test('Sentiment Analyser should correctly identify sentiment for attributes of i
             'Zoho Projects': -14
         }
     };
-    console.log('ANALYSE SENTIMENT', analyseSentiment);
     const actualOutput = analyseSentiment(email, ['Zoho Support', 'Zoho Projects']);
-    expect.deepEqual(actualOutput.attributeScores, expectedOutput.attributeScores);
-    expect.end();
-});
+    assert.deepEqual(actualOutput.attributeScores, expectedOutput.attributeScores);
+  });
 
-test('Sentiment Analyser should correctly handle German messages', function (expect) {
+  it('should correctly handle German messages', function () {
     const email = `Hallo Leute,
     ich will sagen dass ich Zoho Support wirklich mag!
     Aber ich muss ernstlich sein. Ich hasse unglaublicherweise Zoho Projects! Es hat viele Probleme. Z.b. es braucht
@@ -30,6 +29,6 @@ test('Sentiment Analyser should correctly handle German messages', function (exp
         }
     };
     const actualOutput = analyseSentiment(email, ['Zoho Support', 'Zoho Projects']);
-    expect.deepEqual(actualOutput.attributeScores, expectedOutput.attributeScores);
-    expect.end();
+    assert.deepEqual(actualOutput.attributeScores, expectedOutput.attributeScores);
+  });
 });
