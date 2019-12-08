@@ -1,11 +1,11 @@
-import {test} from 'tape';
+import { test } from 'tape';
 import emailParseUtil from '../../src/utils/emailParseUtil.js';
 
-(function () {
-    'use strict';
+(function runTest() {
+  'use strict';
 
-    test('Signature parser should correctly strip out Zoho Support replies', function (expect) {
-        const originalEmail = `<td><div dir="ltr">Can you advise whether this has been done?</div><div><br clear="all"><div><div><div dir="ltr"><div>Jeremy Nagel<br></div><div><i>Lead Developer</i><br></div><div><a href="http://Nuanced.IT" target="_blank">Nuanced IT</a><br></div><div><br></div><div>E: <a href="mailto:jeremy.nagel@nuanced.it" target="_blank">jeremy.nagel@nuanced.it</a><br></div><div>M: (+61) 0414 885 787<br></div><div><div>Skype: jeznag<br><br><a href="http://Nuanced.IT" target="_blank"></a></div></div></div></div></div>
+  test('Signature parser should correctly strip out Zoho Support replies', (expect) => {
+    const originalEmail = `<td><div dir="ltr">Can you advise whether this has been done?</div><div><br clear="all"><div><div><div dir="ltr"><div>Jeremy Nagel<br></div><div><i>Lead Developer</i><br></div><div><a href="http://Nuanced.IT" target="_blank">Nuanced IT</a><br></div><div><br></div><div>E: <a href="mailto:jeremy.nagel@nuanced.it" target="_blank">jeremy.nagel@nuanced.it</a><br></div><div>M: (+61) 0414 885 787<br></div><div><div>Skype: jeznag<br><br><a href="http://Nuanced.IT" target="_blank"></a></div></div></div></div></div>
     <br><div>On Tue, Sep 22, 2015 at 8:27 PM, Jeremy Nagel <span dir="ltr">&lt;<a href="mailto:jeremy.nagel@nuanced.it" target="_blank">jeremy.nagel@nuanced.it</a>&gt;</span> wrote:<br><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir="ltr">Hi Ankit,<div>how did you go with this?</div></div><div><br clear="all"><div><div><div dir="ltr"><div>Jeremy Nagel<br></div><div><i>Lead Developer</i><br></div><div><a href="http://Nuanced.IT" target="_blank">Nuanced IT</a><br></div><div><br></div><div>E: <a href="mailto:jeremy.nagel@nuanced.it" target="_blank">jeremy.nagel@nuanced.it</a><br></div><div>M: <a>(+61) 0414 885 787</a><br></div><div><div>Skype: jeznag<br><br><a href="http://Nuanced.IT" target="_blank"></a></div></div></div></div></div><div><div>
     <br><div>On Wed, Jul 29, 2015 at 4:23 PM, Carmen Sabre <span dir="ltr">&lt;<a href="mailto:carmen.s@searchresults.com.au" target="_blank">carmen.s@searchresults.com.au</a>&gt;</span> wrote:<br><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><p dir="ltr">Ok yes go ahead thank you </p><div><div>
     <div>On 29/07/2015 4:10 pm, "Vishal Systango" &lt;<a href="mailto:vishal@systematixtechnocrates.com" target="_blank">vishal@systematixtechnocrates.com</a>&gt; wrote:<br type="attribution"><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir="ltr"><div>Yes this is the option 3 and estimation is 20hours.</div></div><div><br><div>On Tue, Jul 28, 2015 at 5:28 AM, Carmen Sabre <span dir="ltr">&lt;<a href="mailto:carmen.s@searchresults.com.au" target="_blank">carmen.s@searchresults.com.au</a>&gt;</span> wrote:<br><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir="ltr">Hi Vishal, Jeremy,&nbsp;<div><br></div><div>Can you confirm is this option 3? And the amount for the est. 20 hours?&nbsp;</div></div><div><div><div><br><div>On 24 July 2015 at 17:46, Jeremy Nagel <span dir="ltr">&lt;<a href="mailto:jeremy.nagel@nuanced.it" target="_blank">jeremy.nagel@nuanced.it</a>&gt;</span> wrote:<br><blockquote style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><p dir="ltr">Oh yeah good point. Ok cool I'm happy with that. Carmen can you approve 20 hours?</p><span>
@@ -91,14 +91,14 @@ import emailParseUtil from '../../src/utils/emailParseUtil.js';
     </blockquote></div>
     </div></div></blockquote></div><br></div></div></div>
     </blockquote></div><br></div></td>`;
-        const expectedOutput = 'Can you advise whether this has been done?';
-        let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
-        expect.equal(actualOutput, expectedOutput);
-        expect.end();
-    });
+    const expectedOutput = 'Can you advise whether this has been done?';
+    const actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+    expect.equal(actualOutput, expectedOutput);
+    expect.end();
+  });
 
-    test('Cherie example', function (expect) {
-        const originalEmail = `Hi Cherie,
+  test('Cherie example', (expect) => {
+    const originalEmail = `Hi Cherie,
  
 Access to our website is below.
  
@@ -163,14 +163,14 @@ Copyright © 2015 Search Results Specialists Pty Ltd. All Rights Reserved.
  
 
 The information contained in this e-mail is private and confidential and only intended to the recipient of this email.  Search Results have, in preparing this information used our best endeavours to ensure that the information contained therein is true and accurate, but accept no responsibility and disclaim all liability in respect of any errors, inaccuracies or misstatements contained herein. All parties interested in any Search Results product and /or service should make their own inquiries to verify the information contained herein. If you are not the intended recipient, you may not disclose or use the information in this e-mail in any way.  Search Results does not guarantee the integrity of any e-mails or attached files. The views or opinions expressed are the author's own and may not reflect the views or opinions of Search Results Specialists Pty Ltd. Search Results Specialists Pty Ltd is an independent service company that has no association or affiliation with Google. Google, AdWords and Google Places are registered or unregistered trademarks, and are the property of, Google Inc. or related entity.`;
-        const expectedOutput = 'Hi Cherie,\n \nAccess to our website is below.\n \n\n\n\n \n \nThank you.';
-        let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
-        expect.equal(actualOutput, expectedOutput);
-        expect.end();
-    });
+    const expectedOutput = 'Hi Cherie,\n \nAccess to our website is below.\n \n\n\n\n \n \nThank you.';
+    const actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+    expect.equal(actualOutput, expectedOutput);
+    expect.end();
+  });
 
-    test('Simone example', function (expect) {
-        const originalEmail = `Hi Simone,
+  test('Simone example', (expect) => {
+    const originalEmail = `Hi Simone,
 hope you're having a nice weekend:) Thanks for that info + questions. I've written answers below.
 
 *We have a database of customers which buy specific brands across what we represent, some buy all brands, some buy less.
@@ -193,7 +193,7 @@ Nuanced IT
 E: jeremy.nagel@nuanced.it
 M: (+61) 0414 885 787
 Skype: jeznag`;
-        const expectedOutput = `Hi Simone,
+    const expectedOutput = `Hi Simone,
 hope you're having a nice weekend:) Thanks for that info + questions. I've written answers below.
 
 *We have a database of customers which buy specific brands across what we represent, some buy all brands, some buy less.
@@ -206,13 +206,13 @@ Yes
 I'm not sure. Have contacted NuOrder for details about the API
 *Does it talk to Mailchimp, so we can send out newsletters to specific buyers by brand?
 Yes. You can also use Zoho Campaigns which does the same thing and has better integration.`;
-        let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
-        expect.equal(actualOutput, expectedOutput);
-        expect.end();
-    });
+    const actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+    expect.equal(actualOutput, expectedOutput);
+    expect.end();
+  });
 
-    test('Muhammad example', function (expect) {
-        const originalEmail = `Dear *Jeremy*,
+  test('Muhammad example', (expect) => {
+    const originalEmail = `Dear *Jeremy*,
 
 
 
@@ -1078,9 +1078,9 @@ Mobile - +971-50-689-2526
 Web - www.elitbuzz.com | JLT, Dubai (UAE)
 Your ITSM Partner for – Zoho CRM |Business Intelligence |Project |Survey
 |SMS/Email Marketing`;
-        const expectedOutput = 'Dear *Jeremy*,\n\n\n\nThanks for assistance.\n\n\n\nThe meeting was good day on the demo. Client seems OK with all points\nexcept booking chart.\n\nDuring Zoho Reports demo they found a chart view (as attached with\namendments here), which they like to use for their booking chart.\n\nI would request you, if you could share the possibility of achieving it and\ncould be integrated with Zoho CRM, Creator, Reports.\n\nI am just looking for your understating if it possible with investment\noutline. I have mentioned some of the required points below –\n\n\n\n·         The booking chart should auto update instantly, when the location\nbooking is approved in CRM.\n\n·         Prior to booking when under approval, it should reflect in the\nCRM too as mentioned in the image.\n\n·         It should be interactive enough with ease of understating for all\nviewers.\n\n·         When a portion of status is hovered over, it should give basic\ndetails about that (Client, Start Date, End Date, Agency/ Direct etc.)\n\n·         The chart would be based on locations not on the calendar or\ndate, the mean here is, all locations will remain listed intact and can be\nfurther filtered with other sub related details. (Status, Agencies,\nLocations, Start/End Date, Status etc.).\n\n·         Each location has a unique code, while hovering over to, it\nshould give details of it.\n\n·         The page view should give monthly view as default which could be\ncustomised based on weeks.\n\n·         The chart should reflect the locations which are upcoming\navailable with differentiation. like before 7 days or so.. The CRM should\nalso send email to CRM user for this so they concentrate for new potentials.\n\n·         A limited view access is to be given to some agencies based on\ntheir relation with specific locations only.\n\n\n\nMore, they do also have a question about Account Management, would we be\nable to handle a situation while two CRM users approach one client for\ndifferent services without having to look each other’s job on that.\n\nMeanwhile, the admin or someone as manager can see overall on that\nparticular account. I was thinking it to be with Parent / Child relation.\n\nAm I right on this, or what is your view?\n\n\n\nLooking for your feedback.\n\n\n\n*--*\n\n*';
-        let actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
-        expect.equal(actualOutput, expectedOutput);
-        expect.end();
-    });
-})();
+    const expectedOutput = 'Dear *Jeremy*,\n\n\n\nThanks for assistance.\n\n\n\nThe meeting was good day on the demo. Client seems OK with all points\nexcept booking chart.\n\nDuring Zoho Reports demo they found a chart view (as attached with\namendments here), which they like to use for their booking chart.\n\nI would request you, if you could share the possibility of achieving it and\ncould be integrated with Zoho CRM, Creator, Reports.\n\nI am just looking for your understating if it possible with investment\noutline. I have mentioned some of the required points below –\n\n\n\n·         The booking chart should auto update instantly, when the location\nbooking is approved in CRM.\n\n·         Prior to booking when under approval, it should reflect in the\nCRM too as mentioned in the image.\n\n·         It should be interactive enough with ease of understating for all\nviewers.\n\n·         When a portion of status is hovered over, it should give basic\ndetails about that (Client, Start Date, End Date, Agency/ Direct etc.)\n\n·         The chart would be based on locations not on the calendar or\ndate, the mean here is, all locations will remain listed intact and can be\nfurther filtered with other sub related details. (Status, Agencies,\nLocations, Start/End Date, Status etc.).\n\n·         Each location has a unique code, while hovering over to, it\nshould give details of it.\n\n·         The page view should give monthly view as default which could be\ncustomised based on weeks.\n\n·         The chart should reflect the locations which are upcoming\navailable with differentiation. like before 7 days or so.. The CRM should\nalso send email to CRM user for this so they concentrate for new potentials.\n\n·         A limited view access is to be given to some agencies based on\ntheir relation with specific locations only.\n\n\n\nMore, they do also have a question about Account Management, would we be\nable to handle a situation while two CRM users approach one client for\ndifferent services without having to look each other’s job on that.\n\nMeanwhile, the admin or someone as manager can see overall on that\nparticular account. I was thinking it to be with Parent / Child relation.\n\nAm I right on this, or what is your view?\n\n\n\nLooking for your feedback.\n\n\n\n*--*\n\n*';
+    const actualOutput = emailParseUtil.removeQuotedTextFromEmail(originalEmail);
+    expect.equal(actualOutput, expectedOutput);
+    expect.end();
+  });
+}());

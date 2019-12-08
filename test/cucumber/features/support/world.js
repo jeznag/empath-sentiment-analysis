@@ -4,10 +4,10 @@ import { calculateReadabilityScore } from '../../../../src/utils/calculateReadin
 import analyseEgoism from '../../../../src/utils/egoismAnalyser.js';
 
 function WorldConstructor() {
-    this.sentimentAnalyser = sentimentAnalyser;
-    this.discProfileAnalyser = discProfileAnalyser;
-    this.readabilityAnalyser = calculateReadabilityScore;
-    this.egoismAnalyser = analyseEgoism;
+  this.sentimentAnalyser = sentimentAnalyser;
+  this.discProfileAnalyser = discProfileAnalyser;
+  this.readabilityAnalyser = calculateReadabilityScore;
+  this.egoismAnalyser = analyseEgoism;
 }
 
 module.exports.World = WorldConstructor;

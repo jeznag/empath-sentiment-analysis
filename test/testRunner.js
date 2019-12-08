@@ -1,6 +1,7 @@
+/* eslint no-console: 0 */ // --> OFF
 import { exec } from 'child_process';
 
-exec('babel-tape-runner test/tape/*.js', function(err, stdout, stderr) {
+exec('babel-tape-runner test/tape/*.js', (err, stdout, stderr) => {
   console.log(stdout);
   console.log(stderr);
 });

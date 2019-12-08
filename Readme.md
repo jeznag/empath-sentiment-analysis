@@ -20,7 +20,7 @@ import empath from 'empath-sentiment-analysis';
 empath.analyseSentiment(phrase = '', attributesOfInterest = []);
 ```
 
-Result: 
+Result:
 ```
 {
     wordListDidNotMatch: tryAnotherWordList,
