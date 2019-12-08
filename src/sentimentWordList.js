@@ -13,11 +13,12 @@ THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 export default {
   ENGLISH: {
     WORDS_TO_COMBINE: [
+      "don't you just",
       'you just',
       'you learn',
       // overfitting hack to fix one test case
       'broken down the',
-      'don\'t understand',
+      "don't understand",
       'fucking awesome',
       'so what',
       'why not',
@@ -25,15 +26,16 @@ export default {
       "don't like",
       "can't wait to",
       "can't wait",
-      "best not to",
-      "does not make sense",
+      'best not to',
+      'does not make sense',
       "doesn't make sense",
-      "make sense",
-      "not sure why"
+      'make sense',
+      'not sure why'
     ],
     SENTIMENT_SCORES: {
       // See https://blog.plover.com/tech/why-dont-you.html
       you_just: -5,
+      "don't_you_just": -5,
       // "I suggest you learn.." is a bit patronising
       you_learn: -4,
       broken_down_the: 0,
@@ -44,10 +46,10 @@ export default {
       so_what: -5,
       "can't_wait_to": 3,
       "can't_wait": -2,
-      "make_sense": -1,
-      "does_not_make_sense": -2,
+      make_sense: -1,
+      does_not_make_sense: -2,
       "doesn't_make_sense": -2,
-      "not_sure_why": -1,
+      not_sure_why: -1,
       // a bit overconfident. How about... would be nicer
       why_not: -1,
       // separate from like which is neutral, e.g. "something like"
@@ -395,7 +397,7 @@ export default {
       calmed: 2,
       calming: 2,
       calms: 2,
-      'can\'t stand': -3,
+      "can't stand": -3,
       cancel: -1,
       cancelled: -1,
       cancelling: -1,
@@ -2546,7 +2548,16 @@ export default {
       terrorizing: -3
     },
     PREFIX_MODIFIERS: {
-      really: 2, fricking: 2, damn: 2, bloody: 2, not: -1, 'can\'t': -1, such: 2, too: 2, so: 1, 'don\'t': -2
+      really: 2,
+      fricking: 2,
+      damn: 2,
+      bloody: 2,
+      not: -1,
+      "can't": -1,
+      such: 2,
+      too: 2,
+      so: 1,
+      "don't": -2
     },
     POSTFIX_MODIFIERS: { '!': 3 }
   },

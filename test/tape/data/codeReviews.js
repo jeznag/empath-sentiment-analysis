@@ -59,6 +59,10 @@ A better comment would be something like:`,
     expectedScore: -6
   },
   {
+    codeReviewMessage: `why don't you just use sshd?`,
+    expectedScore: -6
+  },
+  {
     codeReviewMessage: `Why didn't you just use sshd? I suppose it's because you're an incompetent nitwit.`,
     expectedScore: -15
   },
