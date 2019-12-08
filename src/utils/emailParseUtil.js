@@ -1,22 +1,23 @@
 import emailSignatureParser from './emailSignatureParser.js';
 
-let extractSignature = emailSignatureParser.extractSignature;
+const { extractSignature } = emailSignatureParser;
 
 /**
 * Emails often come with copies of old emails from earlier in the thread
 * We don't want to process the old emails when we're analysing as we'll have a false positive otherwise
-**/             
-function removeQuotedTextFromEmail (emailContents) {
-    let strippedHTML = stripHTML(emailContents);
-    let processedEmail = extractSignature(strippedHTML).text || emailContents;
+* */
+function removeQuotedTextFromEmail(emailContents) {
+  const strippedHTML = stripHTML(emailContents);
+  const processedEmail = extractSignature(strippedHTML).text || emailContents;
 
-    return processedEmail;
+  return processedEmail;
 }
 
 function stripHTML(message) {
-    return message.replace(/<(?:.|\n)*?>/gm, '\n').replace(/&lt;/g,'').replace(/&gt;/g,'').replace(/&amp;/g,'').replace(/&nbsp;/g, '\s');
+  return message.replace(/<(?:.|\n)*?>/gm, '\n').replace(/&lt;/g, '').replace(/&gt;/g, '').replace(/&amp;/g, '')
+    .replace(/&nbsp;/g, ' ');
 }
 
 export default {
-    removeQuotedTextFromEmail
+  removeQuotedTextFromEmail
 };

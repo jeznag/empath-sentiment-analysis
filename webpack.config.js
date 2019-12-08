@@ -1,41 +1,33 @@
-const webpack = require('webpack');
 const path = require('path');
-const PROD = JSON.parse(process.env.PROD_DEV || '0');
+const env = process.env.ENV || 'development';
 
 module.exports = {
-  entry: [
-    './src/empath.js'
-  ],
+  entry: ['./src/empath.js'],
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'empath.js'
+    filename: 'empath.js',
+    library: 'empath'
   },
-  devtool: ['source-map'],
-  resolveLoader: {
-    packageMains: ['json-loader']
-  },
+  mode: env,
+  devtool: env === 'production' ? '' : 'source-map',
+  optimization:
+    env === 'prodfuction'
+      ? {
+          minimize: true
+        }
+      : {},
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets: ['es2015'],
-          plugins: [
-          ]
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
         }
       }
     ]
-  },
-  plugins: PROD ? [
-    new webpack.optimize.UglifyJsPlugin({ minimize: true }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"',
-    })
-  ] : [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"development"',
-    })
-  ]
+  }
 };

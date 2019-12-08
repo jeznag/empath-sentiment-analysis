@@ -1,162 +1,167 @@
-//from https://github.com/lmtm/node-talon
-//few config changes
-"use strict";
+// from https://github.com/lmtm/node-talon
+// few config changes
+
+'use strict';
 
 /* eslint-env node */
 /* eslint no-use-before-define:0 */
 
-var _ = require("lodash");
-var debug = function (title, result) {
-  //console.log(title, result);
-};
+const DEBUG = false;
+
+function debug(title, result) {
+  if (DEBUG) {
+    console.log(title, result); // eslint-disable-line no-console
+  }
+}
 
 module.exports = {
-  "extractSignature": extractSignature,
-  "getSignatureCandidate": getSignatureCandidate
+  extractSignature,
+  getSignatureCandidate
 };
 
 
 // RE_DELIMITER = re.compile('\r?\n')
-var RE_DELIMITER = /\r?\n/;
+const RE_DELIMITER = /\r?\n/;
 
 // from talon.utils import get_delimiter
-function getDelimiter (msgBody) {
-  var delimiter = RE_DELIMITER.exec(msgBody);
+function getDelimiter(msgBody) {
+  const delimiter = RE_DELIMITER.exec(msgBody);
   if (delimiter) {
     return delimiter[0];
-  } else {
-    return "\n";
   }
+  return '\n';
 }
 
 // maximum expected length of a single message in lines
-var MESSAGE_MAX_LINES = 400;
+const MESSAGE_MAX_LINES = 400;
 
 // Original: 60
 // Switched to 80 as French is a bit more verbose :P
-var TOO_LONG_SIGNATURE_LINE = 250;
+const TOO_LONG_SIGNATURE_LINE = 250;
 
 
 // From https://gist.github.com/dperini/729294
 // See https://mathiasbynens.be/demo/url-regex
-var RE_URL = new RegExp(
-    // protocol identifier
-    "(?:(?:https?|ftp)://)" +
+const RE_URL = new RegExp(
+  // protocol identifier
+  '(?:(?:https?|ftp)://)'
     // user:pass authentication
-    "(?:\\S+(?::\\S*)?@)?" +
-    "(?:" +
+    + '(?:\\S+(?::\\S*)?@)?'
+    + '(?:'
       // IP address exclusion
       // private & local networks
-      "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
-      "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
-      "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
+      + '(?!(?:10|127)(?:\\.\\d{1,3}){3})'
+      + '(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})'
+      + '(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})'
       // IP address dotted notation octets
       // excludes loopback network 0.0.0.0
       // excludes reserved space >= 224.0.0.0
       // excludes network & broacast addresses
       // (first & last IP address of each class)
-      "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-      "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-      "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-    "|" +
+      + '(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])'
+      + '(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}'
+      + '(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))'
+    + '|'
       // host name
-      "(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)" +
+      + '(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)'
       // domain name
-      "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*" +
+      + '(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*'
       // TLD identifier
-      "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
-    ")" +
+      + '(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))'
+    + ')'
     // port number
-    "(?::\\d{2,5})?" +
+    + '(?::\\d{2,5})?'
     // resource path
-    "(?:/\\S*)?",
-"ig");
+    + '(?:/\\S*)?',
+  'ig'
+);
 
 // regex to fetch signature based on common signature words
-var RE_SIGNATURE = new RegExp(
-  "(" +
-    "(?:" +
+const RE_SIGNATURE = new RegExp(
+  '('
+    + '(?:'
       // from original talon lib
-      "^[ \\t]*--*[\\s]*[a-z \\.]*$" +
-      "|" +
-      "[ \\t]*thanks[\\s,!*]*$" +
-      "|" +
-      "[ \\t]*thank[\s]*you*(very much)[\\s,!]$" +
-      "|" +
-      "[ \\t]*regards[\\s,!]*" +
-      "|" +
-      "[ \\t]*regards[\\s,!]*$" +
-      "|" +
-      "[ \\t]*cheers[\\s,!]*$" +
-      "|" +
-      "^[-]{2,}" +
-      "|" +
-      "^[ \\t]*best[ a-z]*[\\s,!]*$" +
-      "|" +
-      "/^[a-z ,.'-]+$/i" +
+      + '^[ \\t]*--*[\\s]*[a-z \\.]*$'
+      + '|'
+      + '[ \\t]*thanks[\\s,!*]*$'
+      + '|'
+      + '[ \\t]*thank[\\s]*you*(very much)[\\s,!]$'
+      + '|'
+      + '[ \\t]*regards[\\s,!]*'
+      + '|'
+      + '[ \\t]*regards[\\s,!]*$'
+      + '|'
+      + '[ \\t]*cheers[\\s,!]*$'
+      + '|'
+      + '^[-]{2,}'
+      + '|'
+      + '^[ \\t]*best[ a-z]*[\\s,!]*$'
+      + '|'
+      + "/^[a-z ,.'-]+$/i"
       // added for French support
-      "|" +
-      "^[ \\t]*merci[\\s,!]*$" +
-      "|" +
-      "^[ \\t]*(?:mes\\s+)?(remerciements|respects)[\\s,!]*$" +
-      "|" +
-      "^[ \\t]*(?:bien|très\\s+)?cordialement[\\s,!]*" +
-      "|" +
-      "^[ \\t]*(?:mes\\s+)?meilleur(?:e)?(?:s)?[ a-z]*[\\s,!]*$" +
-      "|" +
-      "^[ \\t]*(?:veuillez recevoir|je vous prie)?.*(?:mes\\s+)?salutations[ a-zé,]*[\\s,!]*$" +
-      "^we want to hear from you." +
-      "|" +
-      "\S+@\S+" +
-      "|" +
-      "^On (Mon|Tue|Wed|Thu|Fri|Sat|Sun)," +
-    ")" +
-    ".*" +
-  ")",
-  "im"
+      + '|'
+      + '^[ \\t]*merci[\\s,!]*$'
+      + '|'
+      + '^[ \\t]*(?:mes\\s+)?(remerciements|respects)[\\s,!]*$'
+      + '|'
+      + '^[ \\t]*(?:bien|très\\s+)?cordialement[\\s,!]*'
+      + '|'
+      + '^[ \\t]*(?:mes\\s+)?meilleur(?:e)?(?:s)?[ a-z]*[\\s,!]*$'
+      + '|'
+      + '^[ \\t]*(?:veuillez recevoir|je vous prie)?.*(?:mes\\s+)?salutations[ a-zé,]*[\\s,!]*$'
+      + '^we want to hear from you.'
+      + '|'
+      + '.+@.+'
+      + '|'
+      + '^On (Mon|Tue|Wed|Thu|Fri|Sat|Sun),'
+    + ')'
+    + '.*'
+  + ')',
+  'im'
 );
 
 // signatures appended by phone email clients
-var RE_PHONE_SIGNATURE = new RegExp(
-  "(" +
-    "(?:" +
+const RE_PHONE_SIGNATURE = new RegExp(
+  '('
+    + '(?:'
       // original talon lib
-      "^sent\\sfrom\\smy[\\s,!\\w]*$" +
-      "|" +
-      "^sent[ ]from[ ]Mailbox[ ]for[ ]iPhone.*$" +
-      "|" +
-      "^sent[ ]([\\S]*[ ])?from[ ]my[ ]BlackBerry.*$" +
-      "|" +
-      "^Enviado[ ]desde[ ]mi[ ]([\\S]+[ ]){0,2}BlackBerry.*$" +
+      + '^sent\\sfrom\\smy[\\s,!\\w]*$'
+      + '|'
+      + '^sent[ ]from[ ]Mailbox[ ]for[ ]iPhone.*$'
+      + '|'
+      + '^sent[ ]([\\S]*[ ])?from[ ]my[ ]BlackBerry.*$'
+      + '|'
+      + '^Enviado[ ]desde[ ]mi[ ]([\\S]+[ ]){0,2}BlackBerry.*$'
       // added French support
-      "|" +
-      "^envoyé\\sdepuis.*$" +
-      "|" +
-      "^M:." +
-    ")" +
-    ".*" +
-  ")",
-  "im"
+      + '|'
+      + '^envoyé\\sdepuis.*$'
+      + '|'
+      + '^M:.'
+    + ')'
+    + '.*'
+  + ')',
+  'im'
 );
 
-var RE_NAME = /^([A-Z][a-z]*)[\s-]([A-Z][a-z]*)$/m;
+const RE_NAME = /^([A-Z][a-z]*)[\s-]([A-Z][a-z]*)$/m;
 
 
 // see _mark_candidate_indexes() for details
 // c - could be signature line
 // d - line starts with dashes (could be signature or list item)
 // l - long line
-var RE_SIGNATURE_CANDIDATE = new RegExp(
-  "(c+d)[^d]" +
-  "|" +
-  "(c+d)$" +
-  "|" +
-  "(c+)" +
-  "|" +
-  "(d)[^d]" +
-  "|" +
-  "(d)$"
-, "im");
+const RE_SIGNATURE_CANDIDATE = new RegExp(
+  '(c+d)[^d]'
+  + '|'
+  + '(c+d)$'
+  + '|'
+  + '(c+)'
+  + '|'
+  + '(d)[^d]'
+  + '|'
+  + '(d)$',
+  'im'
+);
 
 
 /* from original lib
@@ -170,47 +175,45 @@ var RE_SIGNATURE_CANDIDATE = new RegExp(
     >>> extract_signature('Hey man!')
     ('Hey man!', None)
 */
-function extractSignature (msgBody) {
+function extractSignature(msgBody) {
   try {
     // identify line delimiter first
-    var delimiter = getDelimiter(msgBody);
+    const delimiter = getDelimiter(msgBody);
 
     // make an assumption
-    var strippedBody = msgBody.trim();
-    var phoneSignature = null;
+    let strippedBody = msgBody.trim();
+    let phoneSignature = null;
 
     // strip off phone signature (get last one)
-    var match = msgBody.match(RE_PHONE_SIGNATURE);
+    const match = msgBody.match(RE_PHONE_SIGNATURE);
     if (match) {
       phoneSignature = strippedBody.substring(match.index);
       strippedBody = strippedBody.substring(0, match.index);
     }
-    debug("phoneSignature", JSON.stringify(phoneSignature));
+    debug('phoneSignature', JSON.stringify(phoneSignature));
 
-    var matchInitials = strippedBody.match(RE_NAME);
-    var initialsSignature = null;
+    const matchInitials = strippedBody.match(RE_NAME);
 
     if (matchInitials) {
-      initialsSignature = strippedBody.replace(/(\r\n|\n|\r)/gm,"").substring(matchInitials.index);
       strippedBody = strippedBody.substring(0, matchInitials.index);
     }
 
     // decide on signature candidate
-    var lines = strippedBody.split(delimiter);
-    debug("lines", lines);
-    var candidate = getSignatureCandidate(lines).join(delimiter);
-    debug("candidate", JSON.stringify(candidate));
+    const lines = strippedBody.split(delimiter);
+    debug('lines', lines);
+    const candidate = getSignatureCandidate(lines).join(delimiter);
+    debug('candidate', JSON.stringify(candidate));
 
     // Try to extract signature
-    var signatureIndex = candidate.search(RE_SIGNATURE);
+    const signatureIndex = candidate.search(RE_SIGNATURE);
 
     // No signature found, just use (maybe) phone signature
     if (signatureIndex === -1) {
-      return { "text": strippedBody.trim(), "signature": phoneSignature };
+      return { text: strippedBody.trim(), signature: phoneSignature };
     }
 
-    var signature = candidate.substring(signatureIndex);
-    debug("signature", JSON.stringify(signature));
+    let signature = candidate.substring(signatureIndex);
+    debug('signature', JSON.stringify(signature));
 
     // when we splitlines() and then join them
     // we can lose a new line at the end
@@ -219,14 +222,13 @@ function extractSignature (msgBody) {
     strippedBody = msgBody.substring(0, msgBody.indexOf(signature));
 
     if (phoneSignature) {
-      signature = signature + phoneSignature;
+      signature += phoneSignature;
     }
 
-    return { "text": strippedBody.trim(), "signature": signature };
-
+    return { text: strippedBody.trim(), signature };
   } catch (e) {
-    debug("ERROR extracting signature", e);
-    return { "text": msgBody, "signature": null };
+    debug('ERROR extracting signature', e);
+    return { text: msgBody, signature: null };
   }
 }
 
@@ -241,15 +243,11 @@ function extractSignature (msgBody) {
     * not include more than one line that starts with dashes
     """
 */
-function getSignatureCandidate (lines) {
-  debug("getSignatureCandidate", lines);
+function getSignatureCandidate(lines) {
+  debug('getSignatureCandidate', lines);
   // keep only non-empty lines: ["hello", "", "world"] → [0, 2]
-  var nonEmpty = _.filter(_.map(lines, function (line, index) {
-    return (line && line.trim()) ? index : null;
-  }), function isNotNull (index) {
-    return index !== null;
-  });
-  debug("nonEmpty", nonEmpty);
+  const nonEmpty = lines.map((line, index) => ((line && line.trim()) ? index : null)).filter((index) => index !== null);
+  debug('nonEmpty', nonEmpty);
 
   // if message is empty or just one line then there is no signature
   if (nonEmpty.length <= 1) {
@@ -257,12 +255,12 @@ function getSignatureCandidate (lines) {
   }
 
   // we don't expect signature to start at the 1st line
-  var candidateIndices = nonEmpty.slice(1);
-  debug("candidateIndices", candidateIndices);
+  let candidateIndices = nonEmpty.slice(1);
+  debug('candidateIndices', candidateIndices);
   // message shouldn't be longer then MESSAGE_MAX_LINES
   candidateIndices = candidateIndices.slice(0, MESSAGE_MAX_LINES);
 
-  var markers = markCandidateIndices(lines, candidateIndices);
+  const markers = markCandidateIndices(lines, candidateIndices);
   candidateIndices = processMarkedCandidateIndices(candidateIndices, markers);
 
   // get actual lines for the candidate instead of indices
@@ -286,24 +284,25 @@ function getSignatureCandidate (lines) {
     'cdc'
     """
 */
-function markCandidateIndices (lines, candidateIndices) {
+function markCandidateIndices(lines, candidateIndices) {
   // note: original lib marks from the bottom up, then reverses in _process_marked_candidate_indexes
   // that did not seem very logical so I mark from the top to bottom here
-  debug("markCandidateIndices", lines, candidateIndices);
-  var markers = "";
-  _.forEach(candidateIndices, function (lineIdx) {
-    var line = lines[lineIdx].trim();
+  debug('markCandidateIndices', lines, candidateIndices);
+  let markers = '';
+  candidateIndices.forEach((lineIdx) => {
+    const line = lines[lineIdx].trim();
     if (lineLengthIgnoringURLs(line) > TOO_LONG_SIGNATURE_LINE) {
-      markers += "l"; // Marked as too long
-    } else if (line.match(/^-+[^\-]/)) { // if line.startswith('-') and line.strip("-"):
-      markers += "d"; // Marked as dash-line
+      markers += 'l'; // Marked as too long
+    } else if (line.match(/^-+[^-]/)) {
+      // if line.startswith('-') and line.strip("-"):
+      markers += 'd'; // Marked as dash-line
     } else if (line.match(RE_SIGNATURE)) {
-      markers += "c"; // Still a candidate
+      markers += 'c'; // Still a candidate
     } else {
-        markers += "w"; // weak
+      markers += 'w'; // weak
     }
   });
-  debug("markers", markers);
+  debug('markers', markers);
   return markers;
 }
 
@@ -316,27 +315,27 @@ function markCandidateIndices (lines, candidateIndices) {
     [15, 17]
     """
 */
-function processMarkedCandidateIndices (candidateIndices, markers) {
-  debug("processMarkedCandidateIndices", candidateIndices, markers);
-  var match = markers.match(RE_SIGNATURE_CANDIDATE);
+function processMarkedCandidateIndices(candidateIndices, markers) {
+  debug('processMarkedCandidateIndices', candidateIndices, markers);
+  const match = markers.match(RE_SIGNATURE_CANDIDATE);
   if (!match) {
     return [];
   }
 
-    var found = _.filter(match)[1] || "";
-    var end = match.index;
+  const end = match.index;
 
-    var candidates = candidateIndices.slice(end);
+  const candidates = candidateIndices.slice(end);
 
-  debug("candidates", candidates);
+  debug('candidates', candidates);
 
   return candidates;
 }
 
-function lineLengthIgnoringURLs (line) {
-  var length = line.length;
+function lineLengthIgnoringURLs(line) {
+  let { length } = line;
+  let match;
   do {
-    var match = RE_URL.exec(line);
+    match = RE_URL.exec(line);
     if (match) {
       length -= match[0].length;
     }

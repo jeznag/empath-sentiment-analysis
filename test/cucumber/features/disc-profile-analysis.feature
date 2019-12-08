@@ -30,9 +30,9 @@ Given that Rik (high I) has written the following emails:
     |This is so much fun!! I love going to conferences :)|
 When Rik tries to send the emails
 Then SleepOnIt should give the following DISC results:
-    |{"D": 1, "I": 6, "S":3, "C":1}|
-    |{"D": 1, "I": 6, "S":3, "C":1}|
-    |{"D": 1, "I": 7, "S":1, "C":1}|
+    |{"D": 1, "I": 1, "S":6, "C":1}|
+    |{"D": 1, "I": 1, "S":6, "C":1}|
+    |{"D": 1, "I": 3, "S":4, "C":1}|
 
 Scenario:
 Given that Pat (high S) has written the following emails:
@@ -40,7 +40,7 @@ Given that Pat (high S) has written the following emails:
     |Let's hold off making a decision on this until we can gather more information. I want to make sure that the team is happy with the new office move. Let's all take some time to think about what we all think and come back together in a few weeks. We want to make sure everyone gets consulted.|
 When Pat tries to send the emails
 Then SleepOnIt should give the following DISC results:
-    |{"D": 1, "I":1, "S":6, "C":3}|
+    |{"D": 1, "I":1, "S":3, "C":6}|
     |{"D": 1, "I":1, "S":6, "C":3}|
 
 Scenario:

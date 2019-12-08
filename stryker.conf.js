@@ -1,4 +1,4 @@
-module.exports = function (config) {
+module.exports = function setConfig(config) {
   config.set({
     files: ['test/tape/**/*.js', { pattern: 'src/**/*.js', included: false, mutated: true }],
     testFramework: 'tape',

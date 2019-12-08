@@ -21,14 +21,14 @@ Given that Jeremy has written the following emails in Gmail:
 When Jeremy tries to send the emails in Gmail
 Then SleepOnIt should give the following sentiment scores:
     |-6|
-    |-9|
+    |-8|
     |8|
-    |24|
-    |6|
+    |20|
+    |3|
     |3|
     |-6|
     |-51|
     |-102|
-    |-1|
+    |-5|
     |-6|
-    |12|
+    |15|

@@ -1,24 +1,22 @@
+const assert = require('cucumber-assert');
+const { World } = require('../support/world.js');
 
-module.exports = function () {
-
+module.exports = function runStep() {
   'use strict';
 
-  var assert = require('cucumber-assert'),
-      World = require("../support/world.js").World,
-      thisWorld = new World(),
-      readabilityScores = [],
-      emailData;
+  const thisWorld = new World();
+  const readabilityScores = [];
+  let emailData;
 
-  this.Given('that a sender has written the following emails with varying vocab levels:', function (emailTestData, done) {
-      emailData = emailTestData.raw();
+  this.Given('that a sender has written the following emails with varying vocab levels:', (emailTestData, done) => {
+    emailData = emailTestData.raw();
 
-      done();
+    done();
   });
 
-  this.When('the sender sends the emails', function (done) {
-
-    emailData.forEach(function (individualEmail) {
-      let readabilityScore = thisWorld.readabilityAnalyser(individualEmail[0]);
+  this.When('the sender sends the emails', (done) => {
+    emailData.forEach((individualEmail) => {
+      const readabilityScore = thisWorld.readabilityAnalyser(individualEmail[0]);
 
       readabilityScores.push(readabilityScore);
     });
@@ -26,23 +24,22 @@ module.exports = function () {
     done();
   });
 
-  this.Then('SleepOnIt should give the following readability scores:', function (expectedScores, done) {
+  this.Then('SleepOnIt should give the following readability scores:', (expectedScores, done) => {
     let allTestsPass = true;
 
-    expectedScores.raw().forEach(function (expectedScoreString, index) {
-      let actualScore = readabilityScores[index],
-          expectedScore = expectedScoreString;
+    expectedScores.raw().forEach((expectedScoreString, index) => {
+      const actualScore = readabilityScores[index].toString();
+      const expectedScore = expectedScoreString.toString();
 
-      if (actualScore != expectedScore) {
-        console.log('Expected ' + expectedScore + ' to equal ' + actualScore);
+      if (actualScore !== expectedScore) {
+        // eslint-disable-next-line no-console
+        console.log(`Expected ${expectedScore} to equal ${actualScore}`);
         allTestsPass = false;
       }
-
     });
 
     assert.equal(allTestsPass, true, done);
 
     done();
   });
-
 };

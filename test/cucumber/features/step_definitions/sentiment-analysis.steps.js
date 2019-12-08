@@ -1,48 +1,45 @@
+const assert = require('cucumber-assert');
+const { World } = require('../support/world.js');
 
-module.exports = function () {
-
+module.exports = function runStep() {
   'use strict';
 
-  var emailData,
-      sentimentScores = [],
-      assert = require('cucumber-assert'),
-      World = require("../support/world.js").World,
-      thisWorld = new World();
+  let emailData;
+  const sentimentScores = [];
+  const thisWorld = new World();
 
-  this.Given('that Jeremy has written the following emails in Gmail:', function (emailTestData, done) {
-      emailData = emailTestData.raw();
+  this.Given('that Jeremy has written the following emails in Gmail:', (emailTestData, done) => {
+    emailData = emailTestData.raw();
 
-      done();
+    done();
   });
 
-  this.When('Jeremy tries to send the emails in Gmail', function (done) {
+  this.When('Jeremy tries to send the emails in Gmail', (done) => {
+    emailData.forEach((individualEmail) => {
+      const sentimentScore = thisWorld.sentimentAnalyser(individualEmail[0]);
 
-    emailData.forEach(function (individualEmail) {
-      let sentimentScore = thisWorld.sentimentAnalyser(individualEmail[0]);
-
-      sentimentScores.push(sentimentScore)
+      sentimentScores.push(sentimentScore);
     });
 
     done();
   });
 
-  this.Then('SleepOnIt should give the following sentiment scores:', function (expectedScores, done) {
+  this.Then('SleepOnIt should give the following sentiment scores:', (expectedScores, done) => {
     let allTestsPass = true;
 
-    expectedScores.raw().forEach(function (expectedScoreString, index) {
-      let actualScore = sentimentScores[index].score,
-          expectedScore = parseInt(expectedScoreString[0]);
+    expectedScores.raw().forEach((expectedScoreString, index) => {
+      const actualScore = sentimentScores[index].score;
+      const expectedScore = parseInt(expectedScoreString[0], 10);
 
       if (actualScore !== expectedScore) {
-        console.log('Expected ' + actualScore + ' to equal ' + expectedScore);
+        // eslint-disable-next-line no-console
+        console.log(`Expected ${actualScore} to equal ${expectedScore}`);
         allTestsPass = false;
       }
-
     });
 
     assert.equal(allTestsPass, true, done);
 
     done();
   });
-
 };
